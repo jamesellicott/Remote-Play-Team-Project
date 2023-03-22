@@ -5,13 +5,20 @@ using Mirror;
 
 public class PlayerManager : NetworkBehaviour
 {
+    [Header("Player Details")]
+    public int health = 10;
+    public int mana = 10;
+
+    [Header("Cards")]
     public GameObject card1;
     public GameObject card2;
     public GameObject card3;
 
+    [Header("Zones")]
     public GameObject playerArea;
     public GameObject enemyArea;
-    public GameObject dropZone;
+    public GameObject dropZoneP;
+    public GameObject dropZoneE;
 
     List<GameObject> cards = new List<GameObject>();
 
@@ -22,7 +29,8 @@ public class PlayerManager : NetworkBehaviour
 
         playerArea = GameObject.Find("PlayerZone");
         enemyArea = GameObject.Find("EnemyZone");
-        dropZone = GameObject.Find("DropZone");
+        dropZoneP = GameObject.Find("DropZonePlayer");
+        dropZoneE = GameObject.Find("DropZoneEnemy");
     }
 
     //called on the server when this game object is spawned on the server
@@ -45,17 +53,28 @@ public class PlayerManager : NetworkBehaviour
         {
             GameObject card = Instantiate(cards[Random.Range(0, cards.Count)], new Vector2(0, 0), Quaternion.identity);
             //Spawns the card on the network  connectionToClient means this client has authority over the card gameObject
-            NetworkServer.Spawn(card);
+            NetworkServer.Spawn(card, connectionToClient);
             RpcShowCard(card, "Dealt");
         }
+    }
+
+    public void PlayCard(GameObject card)
+    {
+        CmdPlayCard(card);
+    }
+
+    [Command]
+    void CmdPlayCard(GameObject card)
+    {
+        RpcShowCard(card, "Played");
     }
 
     [ClientRpc]
     void RpcShowCard(GameObject card, string type)
     {
-        if(type == "Dealt")
+        if (type == "Dealt")
         {
-            if(isOwned)
+            if (isOwned)
             {
                 card.transform.SetParent(playerArea.transform, false);
             }
@@ -64,9 +83,16 @@ public class PlayerManager : NetworkBehaviour
                 card.transform.SetParent(enemyArea.transform, false);
             }
         }
-        else if(type == "Played")
+        else if (type == "Played")
         {
-
+            if (isOwned)
+            {
+                card.transform.SetParent(dropZoneP.transform, false);
+            }
+            else
+            {
+                card.transform.SetParent(dropZoneE.transform, false);
+            }
         }
     }
 }
