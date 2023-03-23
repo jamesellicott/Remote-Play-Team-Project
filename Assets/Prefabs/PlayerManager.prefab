@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8837004599089968917}
   m_Layer: 0
   m_Name: PlayerManager
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -95,9 +95,12 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
+  health: 10
+  mana: 10
   card1: {fileID: 2854853194797427702, guid: fa88efaa43a89074e8fc5f0cd13f17b4, type: 3}
   card2: {fileID: 7940463757889110617, guid: 5deccc6e994727e499e8ea681d330ece, type: 3}
   card3: {fileID: 3750144327661268606, guid: 159d790c58a494a44ba0dbb19b311e64, type: 3}
   playerArea: {fileID: 0}
   enemyArea: {fileID: 0}
-  dropZone: {fileID: 0}
+  dropZoneP: {fileID: 0}
+  dropZoneE: {fileID: 0}

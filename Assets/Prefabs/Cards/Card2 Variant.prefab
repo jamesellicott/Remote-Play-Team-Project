@@ -93,15 +93,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1759139446235393598, guid: dcb38e6f3bb49b74eb15966cb86c6483, type: 3}
       propertyPath: m_Name
-      value: Card2
+      value: Card2 Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456906390879887235, guid: dcb38e6f3bb49b74eb15966cb86c6483, type: 3}
+      propertyPath: _assetId
+      value: 3706490541
       objectReference: {fileID: 0}
     - target: {fileID: 6732045890696942995, guid: dcb38e6f3bb49b74eb15966cb86c6483, type: 3}
       propertyPath: m_Color.b
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6732045890696942995, guid: dcb38e6f3bb49b74eb15966cb86c6483, type: 3}
       propertyPath: m_Color.r
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7960396171835396420, guid: dcb38e6f3bb49b74eb15966cb86c6483, type: 3}
+      propertyPath: m_text
+      value: 'Health: 5
+
+        Attack: 2
+
+        Mana: 3'
+      objectReference: {fileID: 0}
+    - target: {fileID: 8372464470610661933, guid: dcb38e6f3bb49b74eb15966cb86c6483, type: 3}
+      propertyPath: health
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8372464470610661933, guid: dcb38e6f3bb49b74eb15966cb86c6483, type: 3}
+      propertyPath: attackPower
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8372464470610661933, guid: dcb38e6f3bb49b74eb15966cb86c6483, type: 3}
+      propertyPath: manaRequirement
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcb38e6f3bb49b74eb15966cb86c6483, type: 3}

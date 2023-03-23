@@ -5,7 +5,17 @@ using Mirror;
 
 public class Card : NetworkBehaviour
 {
+    public enum CardState
+    {
+        DECK,
+        DRAWN,
+        PLAYED,
+        DESTROYED
+    }
+
     PlayerManager playerManager;
+
+    public CardState cardState = CardState.DRAWN;
 
     [Header("Card Details")]
     public int health = 0;
@@ -26,7 +36,7 @@ public class Card : NetworkBehaviour
     void Start()
     {
         canvas = GameObject.Find("MainCanvas");
-        Debug.Log(isOwned);
+
         if (isOwned)
             isDraggable = true;
 
@@ -46,7 +56,6 @@ public class Card : NetworkBehaviour
 
     public void StartDrag()
     {
-        Debug.Log("Draggable: " + isDraggable);
         if (isDraggable)
         {
             isDragging = true;
@@ -64,6 +73,7 @@ public class Card : NetworkBehaviour
 
             if (isOverDropZone)
             {
+                cardState = CardState.PLAYED;
                 transform.SetParent(dropZone.transform, false);
                 isDraggable = false;
                 playerManager.PlayCard(gameObject);

@@ -22,6 +22,9 @@ public class PlayerManager : NetworkBehaviour
 
     List<GameObject> cards = new List<GameObject>();
 
+    [Header("Attack")]
+    public GameObject attackingCard;
+
     //called on the client when the game object spawns on the client or when the client connects to a server
     public override void OnStartClient()
     {
@@ -94,5 +97,50 @@ public class PlayerManager : NetworkBehaviour
                 card.transform.SetParent(dropZoneE.transform, false);
             }
         }
+    }
+
+    public void SetAttackingCard(GameObject card)
+    {
+        attackingCard = card;
+        Debug.Log("SetupAttackingCardCalled");
+    }
+
+    private void Update()
+    {
+        Debug.Log("Attacking Card: " + attackingCard + " Player Identity: " + NetworkClient.connection.identity);
+    }
+
+    public void Attack(GameObject attackedCard)
+    {
+        Debug.Log("Attack");
+        Debug.Log("Attakcing Card Set: " + attackingCard + " Player Identity: " + NetworkClient.connection.identity);
+        if (attackingCard != null)
+        {
+            CmdAttackCard(attackedCard);
+        }
+        else
+        {
+            Debug.Log("Boo");
+        }
+    }
+
+    [Command]
+    void CmdAttackCard(GameObject attackedCard)
+    {
+        Debug.Log("Attack Command");
+        if (attackedCard.GetComponent<Card>().health < attackingCard.GetComponent<Card>().attackPower)
+        {
+            Debug.Log("Destroy");
+            RpcCardDestroyed(attackedCard);
+        }
+    }
+
+    [ClientRpc]
+    void RpcCardDestroyed(GameObject destroyedCard)
+    {
+        Debug.Log("Destroy RPC");
+        //Destroy attacked card
+        NetworkServer.Destroy(destroyedCard);
+        //Deal damage to enemy
     }
 }
