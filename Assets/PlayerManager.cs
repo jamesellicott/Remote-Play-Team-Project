@@ -99,10 +99,12 @@ public class PlayerManager : NetworkBehaviour
         }
     }
 
-    public void SetAttackingCard(GameObject card)
+    [Command]
+    public void CmdSetAttackingCard(GameObject card)
     {
+        Debug.Log("CardWasSetTo: " + attackingCard);
         attackingCard = card;
-        Debug.Log("SetupAttackingCardCalled");
+        Debug.Log("CardSetTo: " + attackingCard);
     }
 
     private void Update()
@@ -114,33 +116,29 @@ public class PlayerManager : NetworkBehaviour
     {
         Debug.Log("Attack");
         Debug.Log("Attakcing Card Set: " + attackingCard + " Player Identity: " + NetworkClient.connection.identity);
-        if (attackingCard != null)
-        {
-            CmdAttackCard(attackedCard);
-        }
-        else
-        {
-            Debug.Log("Boo");
-        }
+        //if (attackingCard != null)
+        //{
+        //    CmdAttackCard(attackedCard);
+        //}
     }
 
-    [Command]
-    void CmdAttackCard(GameObject attackedCard)
-    {
-        Debug.Log("Attack Command");
-        if (attackedCard.GetComponent<Card>().health < attackingCard.GetComponent<Card>().attackPower)
-        {
-            Debug.Log("Destroy");
-            RpcCardDestroyed(attackedCard);
-        }
-    }
+    //[Command]
+    //void CmdAttackCard(GameObject attackedCard)
+    //{
+    //    Debug.Log("Attack Command");
+    //    if (attackedCard.GetComponent<Card>().health < attackingCard.GetComponent<Card>().attackPower)
+    //    {
+    //        Debug.Log("Destroy");
+    //        RpcCardDestroyed(attackedCard);
+    //    }
+    //}
 
-    [ClientRpc]
-    void RpcCardDestroyed(GameObject destroyedCard)
-    {
-        Debug.Log("Destroy RPC");
-        //Destroy attacked card
-        NetworkServer.Destroy(destroyedCard);
-        //Deal damage to enemy
-    }
+    //[ClientRpc]
+    //void RpcCardDestroyed(GameObject destroyedCard)
+    //{
+    //    Debug.Log("Destroy RPC");
+    //    //Destroy attacked card
+    //    NetworkServer.Destroy(destroyedCard);
+    //    //Deal damage to enemy
+    //}
 }

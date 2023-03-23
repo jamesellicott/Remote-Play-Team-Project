@@ -104,3 +104,4 @@ MonoBehaviour:
   enemyArea: {fileID: 0}
   dropZoneP: {fileID: 0}
   dropZoneE: {fileID: 0}
+  attackingCard: {fileID: 0}
