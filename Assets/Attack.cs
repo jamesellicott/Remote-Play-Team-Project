@@ -16,20 +16,13 @@ public class Attack : NetworkBehaviour
 
     public void OnClick()
     {
-        Debug.Log("Clicked");
         if(isOwned && GetComponent<Card>().cardState == Card.CardState.PLAYED)
         {
-            playerManager.CmdSetAttackingCard(gameObject);
+            playerManager.CmdOwnedCardSelected(gameObject);
         }
-        else if (!isOwned)
+        else if (!isOwned && GetComponent<Card>().cardState == Card.CardState.PLAYED)
         {
-            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-            //Debug.Log("Players: " + players[0] + ", " + players[1]);
-            foreach (GameObject player in players)
-            {
-                if (player != playerManager.gameObject)
-                    player.GetComponent<PlayerManager>().Attack(gameObject);
-            }
+            playerManager.CmdEnemyCardSelected(gameObject);
         }
     }
 }

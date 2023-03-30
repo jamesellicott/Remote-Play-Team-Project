@@ -6,6 +6,7 @@ using Mirror;
 public class PlayerManager : NetworkBehaviour
 {
     [Header("Player Details")]
+    [SyncVar]
     public int health = 10;
     public int mana = 10;
 
@@ -45,6 +46,7 @@ public class PlayerManager : NetworkBehaviour
         cards.Add(card1);
         cards.Add(card2);
         cards.Add(card3);
+
     }
 
     //Function that will run on the server when it is called on the client
@@ -77,6 +79,7 @@ public class PlayerManager : NetworkBehaviour
     {
         if (type == "Dealt")
         {
+            card.GetComponent<Card>().cardState = Card.CardState.DRAWN;
             if (isOwned)
             {
                 card.transform.SetParent(playerArea.transform, false);
@@ -88,6 +91,7 @@ public class PlayerManager : NetworkBehaviour
         }
         else if (type == "Played")
         {
+            card.GetComponent<Card>().cardState = Card.CardState.PLAYED;
             if (isOwned)
             {
                 card.transform.SetParent(dropZoneP.transform, false);
@@ -100,45 +104,70 @@ public class PlayerManager : NetworkBehaviour
     }
 
     [Command]
-    public void CmdSetAttackingCard(GameObject card)
+    public void CmdOwnedCardSelected(GameObject card)
     {
-        Debug.Log("CardWasSetTo: " + attackingCard);
         attackingCard = card;
-        Debug.Log("CardSetTo: " + attackingCard);
+        //NetworkIdentity opponentIdentity = card.GetComponent<NetworkIdentity>();
+        //TargetRpcOwnedCardSelected(opponentIdentity.connectionToClient, card);
     }
+
+    [TargetRpc]
+    void TargetRpcOwnedCardSelected(NetworkConnection target, GameObject card)
+    {
+        attackingCard = card;
+        Debug.Log("Attacking Card Set: " + attackingCard);
+    }
+
+    [Command]
+    public void CmdEnemyCardSelected(GameObject card)
+    {
+        TargetRpcAttackEnemyCard(card);
+    }
+
+    [TargetRpc]
+    void TargetRpcAttackEnemyCard(GameObject card)
+    {
+        Debug.Log("Attack Card Rpc");
+        if (attackingCard != null)
+            CmdAttack(card);
+    }
+
+    [Command]
+    void CmdAttack(GameObject attackedCard)
+    {
+        if (attackedCard.GetComponent<Card>().health < attackingCard.GetComponent<Card>().attackPower)
+        {
+            //attacker wins encounter
+            //Destroy losing card
+            RpcDestroyCard(attackedCard);
+
+            //Send a targeted Rpc to the player that lost to deal damage to them
+            int damageToBeDealt = attackingCard.GetComponent<Card>().attackPower - attackedCard.GetComponent<Card>().health;
+            NetworkIdentity opponentIdentity = attackedCard.GetComponent<NetworkIdentity>();
+            TargetRpcDealPlayerDamage(opponentIdentity.connectionToClient, damageToBeDealt);
+        }
+    }
+
+    [ClientRpc]
+    void RpcDestroyCard(GameObject destroyedCard)
+    {
+        Debug.Log("Destroy RPC");
+        //Destroy attacked card
+        NetworkServer.Destroy(destroyedCard);
+    }
+
+    [TargetRpc]
+    void TargetRpcDealPlayerDamage(NetworkConnection target, int damage)
+    {
+        health -= damage;
+        Debug.Log("Player Taken Damage: " + damage + ", Current Health: " + health);
+    }
+
+    //Debug Stuff
 
     private void Update()
     {
-        Debug.Log("Attacking Card: " + attackingCard + " Player Identity: " + NetworkClient.connection.identity);
+        if (isLocalPlayer)
+            Debug.Log("Attacking Card: " + attackingCard + " Player Identity: " + NetworkClient.connection.identity);
     }
-
-    public void Attack(GameObject attackedCard)
-    {
-        Debug.Log("Attack");
-        Debug.Log("Attakcing Card Set: " + attackingCard + " Player Identity: " + NetworkClient.connection.identity);
-        //if (attackingCard != null)
-        //{
-        //    CmdAttackCard(attackedCard);
-        //}
-    }
-
-    //[Command]
-    //void CmdAttackCard(GameObject attackedCard)
-    //{
-    //    Debug.Log("Attack Command");
-    //    if (attackedCard.GetComponent<Card>().health < attackingCard.GetComponent<Card>().attackPower)
-    //    {
-    //        Debug.Log("Destroy");
-    //        RpcCardDestroyed(attackedCard);
-    //    }
-    //}
-
-    //[ClientRpc]
-    //void RpcCardDestroyed(GameObject destroyedCard)
-    //{
-    //    Debug.Log("Destroy RPC");
-    //    //Destroy attacked card
-    //    NetworkServer.Destroy(destroyedCard);
-    //    //Deal damage to enemy
-    //}
 }
