@@ -18,11 +18,11 @@ public class Attack : NetworkBehaviour
     {
         if(isOwned && GetComponent<Card>().cardState == Card.CardState.PLAYED)
         {
-            playerManager.CmdOwnedCardSelected(gameObject);
+            playerManager.CmdOwnedCardSelected(gameObject.GetComponent<NetworkIdentity>().netId);
         }
         else if (!isOwned && GetComponent<Card>().cardState == Card.CardState.PLAYED)
         {
-            playerManager.CmdEnemyCardSelected(gameObject);
+            playerManager.CmdAttack(gameObject.GetComponent<NetworkIdentity>().netId);
         }
     }
 }

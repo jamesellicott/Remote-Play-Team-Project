@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 using Mirror;
 
 public class PlayerManager : NetworkBehaviour
 {
     [Header("Player Details")]
-    [SyncVar]
+    public int maxHealth = 10;
+    public int maxMana = 10;
     public int health = 10;
     public int mana = 10;
 
@@ -21,9 +24,21 @@ public class PlayerManager : NetworkBehaviour
     public GameObject dropZoneP;
     public GameObject dropZoneE;
 
+    [Header("PlayerDetails")]
+    public Image playerHealthBar;
+    public TextMeshProUGUI playerHealthText;
+    public Image playerManaBar;
+    public TextMeshProUGUI playerManaText;
+
+    [Header("EnemyDetails")]
+    public Image enemyHealthBar;
+    public TextMeshProUGUI enemyHealthText;
+    public Image enemyManaBar;
+    public TextMeshProUGUI enemyManaText;
+
     List<GameObject> cards = new List<GameObject>();
 
-    [Header("Attack")]
+    [Header("Attack")] [SyncVar]
     public GameObject attackingCard;
 
     //called on the client when the game object spawns on the client or when the client connects to a server
@@ -35,6 +50,22 @@ public class PlayerManager : NetworkBehaviour
         enemyArea = GameObject.Find("EnemyZone");
         dropZoneP = GameObject.Find("DropZonePlayer");
         dropZoneE = GameObject.Find("DropZoneEnemy");
+
+        playerHealthBar = GameObject.Find("PlayerHealthBar").GetComponent<Image>();
+        playerHealthText = GameObject.Find("PlayerHealthText").GetComponent<TextMeshProUGUI>();
+        playerManaBar = GameObject.Find("PlayerManaBar").GetComponent<Image>();
+        playerManaText = GameObject.Find("PlayerManaText").GetComponent<TextMeshProUGUI>();
+
+        enemyHealthBar = GameObject.Find("EnemyHealthBar").GetComponent<Image>();
+        enemyHealthText = GameObject.Find("EnemyHealthText").GetComponent<TextMeshProUGUI>();
+        enemyManaBar = GameObject.Find("EnemyManaBar").GetComponent<Image>();
+        enemyManaText = GameObject.Find("EnemyManaText").GetComponent<TextMeshProUGUI>();
+
+        playerHealthText.text = health.ToString();
+        playerManaText.text = mana.ToString();
+
+        enemyHealthText.text = health.ToString();
+        enemyManaText.text = mana.ToString();
     }
 
     //called on the server when this game object is spawned on the server
@@ -104,64 +135,55 @@ public class PlayerManager : NetworkBehaviour
     }
 
     [Command]
-    public void CmdOwnedCardSelected(GameObject card)
+    public void CmdOwnedCardSelected(uint cardNetID)
     {
-        attackingCard = card;
-        //NetworkIdentity opponentIdentity = card.GetComponent<NetworkIdentity>();
-        //TargetRpcOwnedCardSelected(opponentIdentity.connectionToClient, card);
+        RpcSelectAttackingCard(cardNetID);
     }
 
-    [TargetRpc]
-    void TargetRpcOwnedCardSelected(NetworkConnection target, GameObject card)
+    [ClientRpc]
+    private void RpcSelectAttackingCard(uint cardNetID)
     {
-        attackingCard = card;
-        Debug.Log("Attacking Card Set: " + attackingCard);
+        attackingCard = NetworkClient.spawned[cardNetID].gameObject;
     }
 
     [Command]
-    public void CmdEnemyCardSelected(GameObject card)
+    public void CmdAttack(uint cardNetID)
     {
-        TargetRpcAttackEnemyCard(card);
-    }
+        Debug.Log("Attack Card");
+        if (attackingCard == null) return;
 
-    [TargetRpc]
-    void TargetRpcAttackEnemyCard(GameObject card)
-    {
-        Debug.Log("Attack Card Rpc");
-        if (attackingCard != null)
-            CmdAttack(card);
-    }
+        GameObject opponenetsCard = NetworkServer.spawned[cardNetID].gameObject;
 
-    [Command]
-    void CmdAttack(GameObject attackedCard)
-    {
-        if (attackedCard.GetComponent<Card>().health < attackingCard.GetComponent<Card>().attackPower)
+        if (opponenetsCard.GetComponent<Card>().health < attackingCard.GetComponent<Card>().attackPower)
         {
-            //attacker wins encounter
             //Destroy losing card
-            RpcDestroyCard(attackedCard);
+            NetworkServer.Destroy(opponenetsCard);
 
-            //Send a targeted Rpc to the player that lost to deal damage to them
-            int damageToBeDealt = attackingCard.GetComponent<Card>().attackPower - attackedCard.GetComponent<Card>().health;
-            NetworkIdentity opponentIdentity = attackedCard.GetComponent<NetworkIdentity>();
-            TargetRpcDealPlayerDamage(opponentIdentity.connectionToClient, damageToBeDealt);
+            //Deal damage to the losing player
+            int damageToBeDealt = attackingCard.GetComponent<Card>().attackPower - opponenetsCard.GetComponent<Card>().health;
+            NetworkIdentity opponentsIdentity = opponenetsCard.GetComponent<NetworkIdentity>().connectionToClient.identity;
+            opponentsIdentity.GetComponent<PlayerManager>().health -= damageToBeDealt;
+            RpcUpdateHealthBar(opponentsIdentity);
         }
     }
 
     [ClientRpc]
-    void RpcDestroyCard(GameObject destroyedCard)
+    private void RpcUpdateHealthBar(NetworkIdentity oppIdentity)
     {
-        Debug.Log("Destroy RPC");
-        //Destroy attacked card
-        NetworkServer.Destroy(destroyedCard);
+        if(isOwned)
+        {
+            Debug.Log(oppIdentity.GetComponent<PlayerManager>().health + "   ,   " + maxHealth);
+            Debug.Log(oppIdentity.GetComponent<PlayerManager>().health / maxHealth);
+            enemyHealthBar.fillAmount = oppIdentity.GetComponent<PlayerManager>().health / maxHealth;
+            enemyHealthText.text = oppIdentity.GetComponent<PlayerManager>().health.ToString();
+        }
+        else
+        {
+            playerHealthBar.fillAmount = health / maxHealth;
+            playerHealthText.text = health.ToString();
+        }
     }
 
-    [TargetRpc]
-    void TargetRpcDealPlayerDamage(NetworkConnection target, int damage)
-    {
-        health -= damage;
-        Debug.Log("Player Taken Damage: " + damage + ", Current Health: " + health);
-    }
 
     //Debug Stuff
 
