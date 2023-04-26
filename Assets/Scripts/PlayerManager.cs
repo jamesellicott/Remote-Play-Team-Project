@@ -8,10 +8,10 @@ using Mirror;
 public class PlayerManager : NetworkBehaviour
 {
     [Header("Player Details")]
-    public int maxHealth = 10;
-    public int maxMana = 10;
-    public int health = 10;
-    public int mana = 10;
+    public float maxHealth = 10;
+    public float maxMana = 10;
+    public float health = 10;
+    public float mana = 10;
 
     [Header("Cards")]
     public GameObject card1;
@@ -162,15 +162,18 @@ public class PlayerManager : NetworkBehaviour
             //Deal damage to the losing player
             int damageToBeDealt = attackingCard.GetComponent<Card>().attackPower - opponenetsCard.GetComponent<Card>().health;
             NetworkIdentity opponentsIdentity = opponenetsCard.GetComponent<NetworkIdentity>().connectionToClient.identity;
-            opponentsIdentity.GetComponent<PlayerManager>().health -= damageToBeDealt;
-            RpcUpdateHealthBar(opponentsIdentity);
+            //opponentsIdentity.GetComponent<PlayerManager>().health -= damageToBeDealt;
+
+            RpcUpdateHealthBar(opponentsIdentity, damageToBeDealt);
         }
     }
 
     [ClientRpc]
-    private void RpcUpdateHealthBar(NetworkIdentity oppIdentity)
+    private void RpcUpdateHealthBar(NetworkIdentity oppIdentity, int damageToBeDealt)
     {
-        if(isOwned)
+        oppIdentity.GetComponent<PlayerManager>().health -= damageToBeDealt;
+
+        if (isOwned)
         {
             Debug.Log(oppIdentity.GetComponent<PlayerManager>().health + "   ,   " + maxHealth);
             Debug.Log(oppIdentity.GetComponent<PlayerManager>().health / maxHealth);
@@ -179,9 +182,20 @@ public class PlayerManager : NetworkBehaviour
         }
         else
         {
-            playerHealthBar.fillAmount = health / maxHealth;
-            playerHealthText.text = health.ToString();
+            Debug.Log("Health Bar Rpc");
+            Debug.Log(oppIdentity.GetComponent<PlayerManager>().health + "   ,   " + maxHealth);
+            Debug.Log(oppIdentity.GetComponent<PlayerManager>().health / maxHealth);
+            playerHealthBar.fillAmount = oppIdentity.GetComponent<PlayerManager>().health / maxHealth;
+            playerHealthText.text = oppIdentity.GetComponent<PlayerManager>().health.ToString();
+            //oppIdentity.GetComponent<PlayerManager>().UpdateHealthBar();
         }
+    }
+
+    public void UpdateHealthBar()
+    {
+        Debug.Log("Health Bar Local");
+        playerHealthBar.fillAmount = health / maxHealth;
+        playerHealthText.text = health.ToString();
     }
 
 
