@@ -162,42 +162,49 @@ public class PlayerManager : NetworkBehaviour
             //Deal damage to the losing player
             int damageToBeDealt = attackingCard.GetComponent<Card>().attackPower - opponenetsCard.GetComponent<Card>().health;
             NetworkIdentity opponentsIdentity = opponenetsCard.GetComponent<NetworkIdentity>().connectionToClient.identity;
-            //opponentsIdentity.GetComponent<PlayerManager>().health -= damageToBeDealt;
 
-            RpcUpdateHealthBar(opponentsIdentity, damageToBeDealt);
+            RpcUpdateHealth(opponentsIdentity, damageToBeDealt);
         }
     }
 
     [ClientRpc]
-    private void RpcUpdateHealthBar(NetworkIdentity oppIdentity, int damageToBeDealt)
+    private void RpcUpdateHealth(NetworkIdentity oppIdentity, int damageToBeDealt)
     {
         oppIdentity.GetComponent<PlayerManager>().health -= damageToBeDealt;
 
         if (isOwned)
         {
-            Debug.Log(oppIdentity.GetComponent<PlayerManager>().health + "   ,   " + maxHealth);
-            Debug.Log(oppIdentity.GetComponent<PlayerManager>().health / maxHealth);
             enemyHealthBar.fillAmount = oppIdentity.GetComponent<PlayerManager>().health / maxHealth;
             enemyHealthText.text = oppIdentity.GetComponent<PlayerManager>().health.ToString();
         }
         else
         {
-            Debug.Log("Health Bar Rpc");
-            Debug.Log(oppIdentity.GetComponent<PlayerManager>().health + "   ,   " + maxHealth);
-            Debug.Log(oppIdentity.GetComponent<PlayerManager>().health / maxHealth);
             playerHealthBar.fillAmount = oppIdentity.GetComponent<PlayerManager>().health / maxHealth;
             playerHealthText.text = oppIdentity.GetComponent<PlayerManager>().health.ToString();
-            //oppIdentity.GetComponent<PlayerManager>().UpdateHealthBar();
         }
     }
 
-    public void UpdateHealthBar()
+
+    [Command]
+    public void CmdUpdateManaBar()
     {
-        Debug.Log("Health Bar Local");
-        playerHealthBar.fillAmount = health / maxHealth;
-        playerHealthText.text = health.ToString();
+        RpcUpdateMana();
     }
 
+    [ClientRpc]
+    private void RpcUpdateMana()
+    {
+        if(isOwned)
+        {
+            playerManaBar.fillAmount = mana / maxMana;
+            playerManaText.text = mana.ToString();
+        }
+        else
+        {
+            enemyManaBar.fillAmount = mana / maxMana;
+            enemyManaText.text = mana.ToString();
+        }
+    }
 
     //Debug Stuff
 

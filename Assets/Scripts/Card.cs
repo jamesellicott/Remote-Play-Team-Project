@@ -71,8 +71,10 @@ public class Card : NetworkBehaviour
         {
             isDragging = false;
 
-            if (isOverDropZone)
+            if (isOverDropZone && playerManager.mana >= manaRequirement)
             {
+                playerManager.mana -= manaRequirement;
+                playerManager.CmdUpdateManaBar();
                 cardState = CardState.PLAYED;
                 transform.SetParent(dropZone.transform, false);
                 isDraggable = false;
