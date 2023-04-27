@@ -41,6 +41,11 @@ public class PlayerManager : NetworkBehaviour
     [Header("Attack")] [SyncVar]
     public GameObject attackingCard;
 
+    [Header("Turns")]
+    TurnManager turnManager;
+    public Button endTurnBtn;
+
+
     //called on the client when the game object spawns on the client or when the client connects to a server
     public override void OnStartClient()
     {
@@ -66,6 +71,35 @@ public class PlayerManager : NetworkBehaviour
 
         enemyHealthText.text = health.ToString();
         enemyManaText.text = mana.ToString();
+
+        turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
+        endTurnBtn = GameObject.Find("EndTurnBtn").GetComponent<Button>();
+
+        if (isServer)
+        {
+            //turnManager.hostID = gameObject.GetComponent<NetworkIdentity>();
+            endTurnBtn.gameObject.SetActive(true);
+        }
+        else
+        {
+            //turnManager.clientID = gameObject.GetComponent<NetworkIdentity>();
+            endTurnBtn.gameObject.SetActive(false);
+
+        }
+        //RpcTurnManager();
+    }
+
+    [ClientRpc]
+    private void RpcTurnManager()
+    {
+        if(isServer)
+        {
+            turnManager.hostID = gameObject.GetComponent<NetworkIdentity>();
+        }
+        else
+        {
+            turnManager.clientID = gameObject.GetComponent<NetworkIdentity>();
+        }
     }
 
     //called on the server when this game object is spawned on the server
@@ -78,6 +112,11 @@ public class PlayerManager : NetworkBehaviour
         cards.Add(card2);
         cards.Add(card3);
 
+    }
+
+    public void DrawCards(int ammount)
+    {
+        CmdDrawCards(ammount);
     }
 
     //Function that will run on the server when it is called on the client
@@ -205,6 +244,16 @@ public class PlayerManager : NetworkBehaviour
             enemyManaText.text = mana.ToString();
         }
     }
+
+    public void TurnOnEndTurnBtn()
+    {
+        endTurnBtn.gameObject.SetActive(true);
+    }
+    public void TurnOffEndTurnBtn()
+    {
+        endTurnBtn.gameObject.SetActive(false);
+    }
+
 
     //Debug Stuff
 
