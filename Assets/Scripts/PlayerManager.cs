@@ -157,6 +157,7 @@ public class PlayerManager : NetworkBehaviour
             else
             {
                 card.transform.SetParent(enemyArea.transform, false);
+                card.GetComponent<Card>().FlipCard();
             }
         }
         else if (type == "Played")
@@ -169,6 +170,7 @@ public class PlayerManager : NetworkBehaviour
             else
             {
                 card.transform.SetParent(dropZoneE.transform, false);
+                card.GetComponent<Card>().FlipCard();
             }
         }
     }

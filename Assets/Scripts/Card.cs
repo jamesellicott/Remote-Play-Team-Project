@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Mirror;
 
 public class Card : NetworkBehaviour
@@ -22,6 +23,9 @@ public class Card : NetworkBehaviour
     public int attackPower = 0;
     public int manaRequirement = 0;
 
+    public Color startingColor;
+    public Color backColor;
+
     [Header("Drag & Drop")]
     GameObject canvas;
 
@@ -39,6 +43,9 @@ public class Card : NetworkBehaviour
 
         if (isOwned)
             isDraggable = true;
+
+        //startingColor = gameObject.GetComponent<Image>().color;
+        //backColor = Color.white;
 
         //get the player manager from the client that owns this card
         NetworkIdentity networkIdentity = NetworkClient.connection.identity;
@@ -85,6 +92,22 @@ public class Card : NetworkBehaviour
                 transform.position = startPos;
                 transform.SetParent(startParent.transform, false);
             }
+        }
+    }
+
+    public void FlipCard()
+    {
+        Color currColor = gameObject.GetComponent<Image>().color;
+
+        if(currColor == startingColor)
+        {
+            gameObject.transform.Find("Stats").gameObject.SetActive(false);
+            gameObject.GetComponent<Image>().color = backColor;
+        }
+        else
+        {
+            gameObject.transform.Find("Stats").gameObject.SetActive(true);
+            gameObject.GetComponent<Image>().color = startingColor;
         }
     }
 

@@ -100,6 +100,10 @@ PrefabInstance:
       value: 3535040315
       objectReference: {fileID: 0}
     - target: {fileID: 6732045890696942995, guid: dcb38e6f3bb49b74eb15966cb86c6483, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: b281b91a70a624a0da1c43adc1c30c7b, type: 3}
+    - target: {fileID: 6732045890696942995, guid: dcb38e6f3bb49b74eb15966cb86c6483, type: 3}
       propertyPath: m_Color.b
       value: 0
       objectReference: {fileID: 0}
@@ -128,8 +132,32 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8372464470610661933, guid: dcb38e6f3bb49b74eb15966cb86c6483, type: 3}
+      propertyPath: backColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8372464470610661933, guid: dcb38e6f3bb49b74eb15966cb86c6483, type: 3}
+      propertyPath: backColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8372464470610661933, guid: dcb38e6f3bb49b74eb15966cb86c6483, type: 3}
+      propertyPath: backColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8372464470610661933, guid: dcb38e6f3bb49b74eb15966cb86c6483, type: 3}
+      propertyPath: backColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8372464470610661933, guid: dcb38e6f3bb49b74eb15966cb86c6483, type: 3}
       propertyPath: manaRequirement
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8372464470610661933, guid: dcb38e6f3bb49b74eb15966cb86c6483, type: 3}
+      propertyPath: startingColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8372464470610661933, guid: dcb38e6f3bb49b74eb15966cb86c6483, type: 3}
+      propertyPath: startingColor.r
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcb38e6f3bb49b74eb15966cb86c6483, type: 3}
