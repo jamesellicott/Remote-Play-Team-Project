@@ -89,6 +89,15 @@ public class PlayerManager : NetworkBehaviour
         //RpcTurnManager();
     }
 
+    public bool IsServer()
+    {
+        Debug.Log(NetworkServer.activeHost);
+        if (isServer)
+            return true;
+        else
+            return false;
+    }
+
     [ClientRpc]
     private void RpcTurnManager()
     {
