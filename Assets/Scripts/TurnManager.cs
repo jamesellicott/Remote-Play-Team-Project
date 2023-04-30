@@ -11,6 +11,61 @@ public class TurnManager : NetworkBehaviour
     public NetworkIdentity hostID;
     public NetworkIdentity clientID;
 
+    private GameObject startGameBtn;
+
+    private void Start()
+    {
+        startGameBtn = GameObject.Find("StartGameBtn");
+    }
+
+    public void StartGame()
+    {
+        CmdStartGame();
+    }
+
+    [Command(requiresAuthority = false)]
+    private void CmdStartGame()
+    {
+        RpcStartGame();
+    }
+
+    [ClientRpc]
+    private void RpcStartGame()
+    {
+        GameObject[] clients = GameObject.FindGameObjectsWithTag("Player");
+
+        if (clients[0].GetComponent<NetworkIdentity>().isServer)
+        {
+            if (clients[0].GetComponent<NetworkIdentity>().isLocalPlayer)
+                hostID = clients[0].GetComponent<NetworkIdentity>();
+            else
+                clientID = clients[0].GetComponent<NetworkIdentity>();
+
+            if (clients[1].GetComponent<NetworkIdentity>().isLocalPlayer)
+                hostID = clients[1].GetComponent<NetworkIdentity>();
+            else
+                clientID = clients[1].GetComponent<NetworkIdentity>();
+        }
+        else
+        {
+            if (!clients[0].GetComponent<NetworkIdentity>().isLocalPlayer)
+                hostID = clients[0].GetComponent<NetworkIdentity>();
+            else
+                clientID = clients[0].GetComponent<NetworkIdentity>();
+
+            if (!clients[1].GetComponent<NetworkIdentity>().isLocalPlayer)
+                hostID = clients[1].GetComponent<NetworkIdentity>();
+            else
+                clientID = clients[1].GetComponent<NetworkIdentity>();
+        }
+
+        hostID.GetComponent<PlayerManager>().DrawCards(5);
+        clientID.GetComponent<PlayerManager>().DrawCards(5);
+
+        startGameBtn.SetActive(false);
+        if(!isServer) { clientID.GetComponent<PlayerManager>().TurnOffEndTurnBtn(); }
+    }
+
     public void EndTurn()
     {
         Debug.Log("Local");
@@ -32,15 +87,31 @@ public class TurnManager : NetworkBehaviour
         {
             GameObject[] clients = GameObject.FindGameObjectsWithTag("Player");
 
-            if (clients[0].GetComponent<NetworkIdentity>().isLocalPlayer && clients[0].GetComponent<NetworkIdentity>().isServer)
-                hostID = clients[0].GetComponent<NetworkIdentity>();
-            else
-                clientID = clients[0].GetComponent<NetworkIdentity>();
+            if (clients[0].GetComponent<NetworkIdentity>().isServer)
+            {
 
-            if (clients[1].GetComponent<NetworkIdentity>().isLocalPlayer && clients[1].GetComponent<NetworkIdentity>().isServer)
-                hostID = clients[1].GetComponent<NetworkIdentity>();
+                if (clients[0].GetComponent<NetworkIdentity>().isLocalPlayer)
+                    hostID = clients[0].GetComponent<NetworkIdentity>();
+                else
+                    clientID = clients[0].GetComponent<NetworkIdentity>();
+
+                if (clients[1].GetComponent<NetworkIdentity>().isLocalPlayer)
+                    hostID = clients[1].GetComponent<NetworkIdentity>();
+                else
+                    clientID = clients[1].GetComponent<NetworkIdentity>();
+            }
             else
-                clientID = clients[1].GetComponent<NetworkIdentity>();
+            {
+                if (!clients[0].GetComponent<NetworkIdentity>().isLocalPlayer)
+                    hostID = clients[0].GetComponent<NetworkIdentity>();
+                else
+                    clientID = clients[0].GetComponent<NetworkIdentity>();
+
+                if (!clients[1].GetComponent<NetworkIdentity>().isLocalPlayer)
+                    hostID = clients[1].GetComponent<NetworkIdentity>();
+                else
+                    clientID = clients[1].GetComponent<NetworkIdentity>();
+            }
         }
         else
         {
@@ -48,14 +119,18 @@ public class TurnManager : NetworkBehaviour
             if (hostsTurn)
             {
                 hostID.GetComponent<PlayerManager>().DrawCards(1);
-                hostID.GetComponent<PlayerManager>().TurnOnEndTurnBtn();
-                clientID.GetComponent<PlayerManager>().TurnOffEndTurnBtn();
+                if(isServer)
+                    hostID.GetComponent<PlayerManager>().TurnOnEndTurnBtn();
+                else
+                    clientID.GetComponent<PlayerManager>().TurnOffEndTurnBtn();
             }
             else
             {
                 clientID.GetComponent<PlayerManager>().DrawCards(1);
-                clientID.GetComponent<PlayerManager>().TurnOnEndTurnBtn();
-                hostID.GetComponent<PlayerManager>().TurnOffEndTurnBtn();
+                if(!isServer)
+                    clientID.GetComponent<PlayerManager>().TurnOnEndTurnBtn();
+                else
+                    hostID.GetComponent<PlayerManager>().TurnOffEndTurnBtn();
             }
         }
     }

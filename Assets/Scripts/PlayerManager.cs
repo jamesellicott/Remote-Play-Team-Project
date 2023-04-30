@@ -75,40 +75,7 @@ public class PlayerManager : NetworkBehaviour
         turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
         endTurnBtn = GameObject.Find("EndTurnBtn").GetComponent<Button>();
 
-        if (isServer)
-        {
-            //turnManager.hostID = gameObject.GetComponent<NetworkIdentity>();
-            endTurnBtn.gameObject.SetActive(true);
-        }
-        else
-        {
-            //turnManager.clientID = gameObject.GetComponent<NetworkIdentity>();
-            endTurnBtn.gameObject.SetActive(false);
-
-        }
-        //RpcTurnManager();
-    }
-
-    public bool IsServer()
-    {
-        Debug.Log(NetworkServer.activeHost);
-        if (isServer)
-            return true;
-        else
-            return false;
-    }
-
-    [ClientRpc]
-    private void RpcTurnManager()
-    {
-        if(isServer)
-        {
-            turnManager.hostID = gameObject.GetComponent<NetworkIdentity>();
-        }
-        else
-        {
-            turnManager.clientID = gameObject.GetComponent<NetworkIdentity>();
-        }
+        Debug.Log("Btn: " + endTurnBtn);
     }
 
     //called on the server when this game object is spawned on the server
@@ -120,7 +87,6 @@ public class PlayerManager : NetworkBehaviour
         cards.Add(card1);
         cards.Add(card2);
         cards.Add(card3);
-
     }
 
     public void DrawCards(int ammount)
@@ -264,7 +230,6 @@ public class PlayerManager : NetworkBehaviour
     {
         endTurnBtn.gameObject.SetActive(false);
     }
-
 
     //Debug Stuff
 
