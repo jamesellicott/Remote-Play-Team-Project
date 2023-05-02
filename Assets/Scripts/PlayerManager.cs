@@ -159,7 +159,11 @@ public class PlayerManager : NetworkBehaviour
     [ClientRpc]
     private void RpcSelectAttackingCard(uint cardNetID)
     {
+        if (attackingCard != null)
+            attackingCard.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+
         attackingCard = NetworkClient.spawned[cardNetID].gameObject;
+        attackingCard.transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
     }
 
     [Command]
@@ -198,6 +202,9 @@ public class PlayerManager : NetworkBehaviour
             playerHealthBar.fillAmount = oppIdentity.GetComponent<PlayerManager>().health / maxHealth;
             playerHealthText.text = oppIdentity.GetComponent<PlayerManager>().health.ToString();
         }
+
+        attackingCard.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+        attackingCard = null;
     }
 
 

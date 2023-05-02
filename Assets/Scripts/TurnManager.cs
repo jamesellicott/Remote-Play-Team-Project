@@ -119,7 +119,20 @@ public class TurnManager : NetworkBehaviour
             if (hostsTurn)
             {
                 hostID.GetComponent<PlayerManager>().DrawCards(1);
-                if(isServer)
+
+                hostID.GetComponent<PlayerManager>().mana++;
+                if (hostID.GetComponent<PlayerManager>().mana > 10)
+                    hostID.GetComponent<PlayerManager>().mana = 10;
+
+                hostID.GetComponent<PlayerManager>().CmdUpdateManaBar();
+
+                if (clientID.GetComponent<PlayerManager>().attackingCard != null)
+                {
+                    clientID.GetComponent<PlayerManager>().attackingCard.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                    clientID.GetComponent<PlayerManager>().attackingCard = null;
+                }
+
+                if (isServer)
                     hostID.GetComponent<PlayerManager>().TurnOnEndTurnBtn();
                 else
                     clientID.GetComponent<PlayerManager>().TurnOffEndTurnBtn();
@@ -127,7 +140,20 @@ public class TurnManager : NetworkBehaviour
             else
             {
                 clientID.GetComponent<PlayerManager>().DrawCards(1);
-                if(!isServer)
+
+                clientID.GetComponent<PlayerManager>().mana++;
+                if (clientID.GetComponent<PlayerManager>().mana > 10)
+                    clientID.GetComponent<PlayerManager>().mana = 10;
+
+                clientID.GetComponent<PlayerManager>().CmdUpdateManaBar();
+
+                if (hostID.GetComponent<PlayerManager>().attackingCard != null)
+                {
+                    hostID.GetComponent<PlayerManager>().attackingCard.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                    hostID.GetComponent<PlayerManager>().attackingCard = null;
+                }
+
+                if (!isServer)
                     clientID.GetComponent<PlayerManager>().TurnOnEndTurnBtn();
                 else
                     hostID.GetComponent<PlayerManager>().TurnOffEndTurnBtn();

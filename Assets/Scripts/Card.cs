@@ -37,6 +37,8 @@ public class Card : NetworkBehaviour
     bool isDragging = false;
     bool isDraggable = false;
 
+    private TurnManager turnManager;
+
     void Start()
     {
         canvas = GameObject.Find("MainCanvas");
@@ -50,6 +52,8 @@ public class Card : NetworkBehaviour
         //get the player manager from the client that owns this card
         NetworkIdentity networkIdentity = NetworkClient.connection.identity;
         playerManager = networkIdentity.GetComponent<PlayerManager>();
+
+        turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
     }
 
     void Update()
@@ -63,34 +67,40 @@ public class Card : NetworkBehaviour
 
     public void StartDrag()
     {
-        if (isDraggable)
+        if ((isServer && turnManager.hostsTurn) || (!isServer && !turnManager.hostsTurn))
         {
-            isDragging = true;
+            if (isDraggable)
+            {
+                isDragging = true;
 
-            startParent = transform.parent.gameObject;
-            startPos = transform.position;
+                startParent = transform.parent.gameObject;
+                startPos = transform.position;
+            }
         }
     }
 
     public void StopDrag()
     {
-        if (isDraggable)
+        if ((isServer && turnManager.hostsTurn) || (!isServer && !turnManager.hostsTurn))
         {
-            isDragging = false;
+            if (isDraggable)
+            {
+                isDragging = false;
 
-            if (isOverDropZone && playerManager.mana >= manaRequirement)
-            {
-                playerManager.mana -= manaRequirement;
-                playerManager.CmdUpdateManaBar();
-                cardState = CardState.PLAYED;
-                transform.SetParent(dropZone.transform, false);
-                isDraggable = false;
-                playerManager.PlayCard(gameObject);
-            }
-            else
-            {
-                transform.position = startPos;
-                transform.SetParent(startParent.transform, false);
+                if (isOverDropZone && playerManager.mana >= manaRequirement)
+                {
+                    playerManager.mana -= manaRequirement;
+                    playerManager.CmdUpdateManaBar();
+                    cardState = CardState.PLAYED;
+                    transform.SetParent(dropZone.transform, false);
+                    isDraggable = false;
+                    playerManager.PlayCard(gameObject);
+                }
+                else
+                {
+                    transform.position = startPos;
+                    transform.SetParent(startParent.transform, false);
+                }
             }
         }
     }
