@@ -6,6 +6,24 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/GameScene.unity
+    path: Assets/Scenes/MainMenu.unity
+    guid: 4851699816e28084f98546b490b448b3
+  - enabled: 1
+    path: Assets/Scenes/Settings Menu.unity
+    guid: e6ebb3279cabcc24d93cbd2a59d616ee
+  - enabled: 1
+    path: Assets/Scenes/DeckViewer.unity
+    guid: 6d2d3aa6564e98146a9451c131ce7bd3
+  - enabled: 1
+    path: Assets/Scenes/JoinHost.unity
+    guid: a37314d62ea98c84197a3afcd112870a
+  - enabled: 1
+    path: Assets/Scenes/JoinGame.unity
+    guid: b1711cfdf1d018448a3f38158a5b00d3
+  - enabled: 1
+    path: Assets/Scenes/Host Game.unity
+    guid: 8194baa41aacbae48a03883b41ff6799
+  - enabled: 1
+    path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   m_configObjects: {}
