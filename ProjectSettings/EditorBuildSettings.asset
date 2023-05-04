@@ -9,8 +9,8 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 4851699816e28084f98546b490b448b3
   - enabled: 1
-    path: Assets/Scenes/Settings Menu.unity
-    guid: e6ebb3279cabcc24d93cbd2a59d616ee
+    path: Assets/Scenes/SettingsMenu.unity
+    guid: c5301561c8b3bda4e816ef09159283e8
   - enabled: 1
     path: Assets/Scenes/DeckViewer.unity
     guid: 6d2d3aa6564e98146a9451c131ce7bd3
