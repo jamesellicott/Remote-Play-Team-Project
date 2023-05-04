@@ -15,6 +15,7 @@ public class LobbyClientStart : MonoBehaviour
     [Header("UI")]
     public Button joinButton;
     public TMP_InputField gameCodeInputField;
+    public TextMeshProUGUI lobbyGameCodeTxt;
 
     private void OnEnable()
     {
@@ -45,12 +46,17 @@ public class LobbyClientStart : MonoBehaviour
     {
         joinButton.interactable = true;
 
-        joinGameCanvas.SetActive(false);
+        lobbyGameCodeTxt.text += gameCodeInputField.text;
+
+        //joinGameCanvas.SetActive(false);
         lobbyCanvas.SetActive(true);
     }
 
     private void HandleClientDisconnected()
     {
         joinButton.interactable = true;
+
+        lobbyCanvas.SetActive(false);
+        joinGameCanvas.SetActive(true);
     }
 }

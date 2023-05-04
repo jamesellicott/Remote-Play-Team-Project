@@ -64,14 +64,17 @@ public class MainMenuButtons : MonoBehaviour
         lobbyCanvas.SetActive(true);
 
         string computerName = Dns.GetHostName();
+        string IPAddress = null;
 
         for (int i = 0; i <= Dns.GetHostEntry(computerName).AddressList.Length - 1; i++)
         {
             if (Dns.GetHostEntry(computerName).AddressList[i].IsIPv6LinkLocal == false)
             {
-                gameCodeText.text = Dns.GetHostEntry(computerName).AddressList[i].ToString();
+                IPAddress = Dns.GetHostEntry(computerName).AddressList[i].ToString();
             }
         }
+
+        gameCodeText.text += IPAddress;
     }
 
     public void StartAsClient()

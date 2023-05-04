@@ -961,6 +961,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc062c6e25f56694894272347bec5fd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  networkManager: {fileID: 0}
+  mainMenuCanvas: {fileID: 0}
+  joinGameCanvas: {fileID: 0}
+  lobbyCanvas: {fileID: 0}
+  deckViewerCanvas: {fileID: 0}
+  mainMenuScene: MainMenu
+  settingsScene: SettingsMenu
+  clientJoinPanel: {fileID: 0}
+  gameCodeText: {fileID: 0}
 --- !u!4 &584044093
 Transform:
   m_ObjectHideFlags: 0
@@ -2423,7 +2432,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1325906436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2482,8 +2491,8 @@ MonoBehaviour:
   autoStartServerBuild: 1
   autoConnectClientBuild: 0
   sendRate: 30
-  offlineScene: Assets/Scenes/SampleScene.unity
-  onlineScene: Assets/Scenes/SampleScene.unity
+  offlineScene: 
+  onlineScene: 
   transport: {fileID: 1325906437}
   networkAddress: localhost
   maxConnections: 100

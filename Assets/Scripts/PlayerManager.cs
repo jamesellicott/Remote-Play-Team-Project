@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 using Mirror;
 
@@ -51,31 +52,34 @@ public class PlayerManager : NetworkBehaviour
     {
         base.OnStartClient();
 
-        playerArea = GameObject.Find("PlayerZone");
-        enemyArea = GameObject.Find("EnemyZone");
-        dropZoneP = GameObject.Find("DropZonePlayer");
-        dropZoneE = GameObject.Find("DropZoneEnemy");
+        if (SceneManager.GetActiveScene().name != "MainMenu")
+        {
+            playerArea = GameObject.Find("PlayerZone");
+            enemyArea = GameObject.Find("EnemyZone");
+            dropZoneP = GameObject.Find("DropZonePlayer");
+            dropZoneE = GameObject.Find("DropZoneEnemy");
 
-        playerHealthBar = GameObject.Find("PlayerHealthBar").GetComponent<Image>();
-        playerHealthText = GameObject.Find("PlayerHealthText").GetComponent<TextMeshProUGUI>();
-        playerManaBar = GameObject.Find("PlayerManaBar").GetComponent<Image>();
-        playerManaText = GameObject.Find("PlayerManaText").GetComponent<TextMeshProUGUI>();
+            playerHealthBar = GameObject.Find("PlayerHealthBar").GetComponent<Image>();
+            playerHealthText = GameObject.Find("PlayerHealthText").GetComponent<TextMeshProUGUI>();
+            playerManaBar = GameObject.Find("PlayerManaBar").GetComponent<Image>();
+            playerManaText = GameObject.Find("PlayerManaText").GetComponent<TextMeshProUGUI>();
 
-        enemyHealthBar = GameObject.Find("EnemyHealthBar").GetComponent<Image>();
-        enemyHealthText = GameObject.Find("EnemyHealthText").GetComponent<TextMeshProUGUI>();
-        enemyManaBar = GameObject.Find("EnemyManaBar").GetComponent<Image>();
-        enemyManaText = GameObject.Find("EnemyManaText").GetComponent<TextMeshProUGUI>();
+            enemyHealthBar = GameObject.Find("EnemyHealthBar").GetComponent<Image>();
+            enemyHealthText = GameObject.Find("EnemyHealthText").GetComponent<TextMeshProUGUI>();
+            enemyManaBar = GameObject.Find("EnemyManaBar").GetComponent<Image>();
+            enemyManaText = GameObject.Find("EnemyManaText").GetComponent<TextMeshProUGUI>();
 
-        playerHealthText.text = health.ToString();
-        playerManaText.text = mana.ToString();
+            playerHealthText.text = health.ToString();
+            playerManaText.text = mana.ToString();
 
-        enemyHealthText.text = health.ToString();
-        enemyManaText.text = mana.ToString();
+            enemyHealthText.text = health.ToString();
+            enemyManaText.text = mana.ToString();
 
-        turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
-        endTurnBtn = GameObject.Find("EndTurnBtn").GetComponent<Button>();
+            turnManager = GameObject.Find("TurnManager").GetComponent<TurnManager>();
+            endTurnBtn = GameObject.Find("EndTurnBtn").GetComponent<Button>();
 
-        Debug.Log("Btn: " + endTurnBtn);
+            Debug.Log("Btn: " + endTurnBtn);
+        }
     }
 
     //called on the server when this game object is spawned on the server

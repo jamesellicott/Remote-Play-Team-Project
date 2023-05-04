@@ -3,11 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using TMPro;
 using Mirror;
 
 public class NetworkManagerLobby : NetworkManager
 {
     [Scene] [SerializeField] private string menuScene = string.Empty;
+    [Scene] [SerializeField] private string gameScene = string.Empty;
 
     [SerializeField] private PlayerManager playerManagerPrefab;
 
@@ -28,28 +31,33 @@ public class NetworkManagerLobby : NetworkManager
         OnClientDisconnected?.Invoke();
     }
 
-    public override void OnServerConnect(NetworkConnectionToClient conn)
+    //public override void OnServerConnect(NetworkConnectionToClient conn)
+    //{
+    //    if(numPlayers >= maxConnections)
+    //    {
+    //        conn.Disconnect();
+    //        return;
+    //    }
+
+    //    if(SceneManager.GetActiveScene().name != menuScene)
+    //    {
+    //        conn.Disconnect();
+    //        return;
+    //    }
+    //}
+
+    //public override void OnServerAddPlayer(NetworkConnectionToClient conn)
+    //{
+    //    if(SceneManager.GetActiveScene().name == menuScene)
+    //    {
+    //        GameObject playerInstance = Instantiate(playerPrefab);
+
+    //        NetworkServer.AddPlayerForConnection(conn, playerInstance);
+    //    }
+    //}
+
+    public void StartGame()
     {
-        if(numPlayers >= maxConnections)
-        {
-            conn.Disconnect();
-            return;
-        }
-
-        if(SceneManager.GetActiveScene().name != menuScene)
-        {
-            conn.Disconnect();
-            return;
-        }
-    }
-
-    public override void OnServerAddPlayer(NetworkConnectionToClient conn)
-    {
-        if(SceneManager.GetActiveScene().name == menuScene)
-        {
-            PlayerManager playerManagerInstance = Instantiate(playerManagerPrefab);
-
-            NetworkServer.AddPlayerForConnection(conn, playerManagerInstance.gameObject);
-        }
+        ServerChangeScene(gameScene);
     }
 }
