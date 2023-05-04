@@ -1,60 +1,84 @@
+using System;
+using System.Net;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using TMPro;
 
 public class MainMenuButtons : MonoBehaviour
 {
-    public void MoveUpScene()
+
+    [SerializeField] private NetworkManagerLobby networkManager;
+
+    [Header("Canvas's")]
+    public GameObject mainMenuCanvas;
+    public GameObject joinGameCanvas;
+    public GameObject lobbyCanvas;
+    public GameObject deckViewerCanvas;
+
+    [Header("Scenes")]
+    public string mainMenuScene = "MainMenu";
+    public string settingsScene = "SettingsMenu";
+
+    [Header("UI")]
+    public GameObject clientJoinPanel;
+    public TextMeshProUGUI gameCodeText;
+
+    public void LoadMainMenu()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        mainMenuCanvas.SetActive(true);
+        joinGameCanvas.SetActive(false);
+        lobbyCanvas.SetActive(false);
+        deckViewerCanvas.SetActive(false);
     }
-    public void MoveUpScene2()
+
+    public void LoadJoinGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 2);
+        mainMenuCanvas.SetActive(false);
+        joinGameCanvas.SetActive(true);
     }
-    public void MoveUpScene3()
+
+    public void LoadDeckViewer()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 3);
-    }
-    public void MoveUpScene4()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 4);
-    }
-    public void MoveUpScene5()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 5);
-    }
-    public void MoveUpScene6()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 6);
-    }
-    public void MoveDownScene()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
-    }
-    public void MoveDownScene2()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 2);
-    }
-    public void MoveDownScene3()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 3);
-    }
-    public void MoveDownScene4()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 4);
-    }
-    public void MoveDownScene5()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 5);
-    }
-    public void MoveDownScene6()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 6);
+        mainMenuCanvas.SetActive(false);
+        deckViewerCanvas.SetActive(true);
     }
     
-    
+    public void LoadSettings()
+    {
+        SceneManager.LoadScene(settingsScene);
+    }
+
+    public void LoadMainMenuFromSettings()
+    {
+        SceneManager.LoadScene(mainMenuScene);
+    }
+
+    public void StartAsHost()
+    {
+        networkManager.StartHost();
+
+        joinGameCanvas.SetActive(false);
+        lobbyCanvas.SetActive(true);
+
+        string computerName = Dns.GetHostName();
+
+        for (int i = 0; i <= Dns.GetHostEntry(computerName).AddressList.Length - 1; i++)
+        {
+            if (Dns.GetHostEntry(computerName).AddressList[i].IsIPv6LinkLocal == false)
+            {
+                gameCodeText.text = Dns.GetHostEntry(computerName).AddressList[i].ToString();
+            }
+        }
+    }
+
+    public void StartAsClient()
+    {
+        clientJoinPanel.SetActive(true);
+    }
+
     public void QuitGame()
     {
         Debug.Log("Quit");
