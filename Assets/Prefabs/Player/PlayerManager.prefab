@@ -95,13 +95,25 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
-  health: 10
-  mana: 10
-  card1: {fileID: 2854853194797427702, guid: fa88efaa43a89074e8fc5f0cd13f17b4, type: 3}
-  card2: {fileID: 7940463757889110617, guid: 5deccc6e994727e499e8ea681d330ece, type: 3}
-  card3: {fileID: 3750144327661268606, guid: 159d790c58a494a44ba0dbb19b311e64, type: 3}
+  maxHealth: 200
+  maxMana: 200
+  health: 200
+  mana: 200
+  card1: {fileID: 954957494570410689, guid: 01859174e86c8604e8f59d67baa6e233, type: 3}
+  card2: {fileID: 6059784249165539077, guid: dc1648bbed994054088101cef5211605, type: 3}
+  card3: {fileID: 8817448664124922733, guid: 0343790e7f669bf418e6c67be482e730, type: 3}
+  card4: {fileID: 3441566149382237447, guid: 873742eef47f6e24aa5acc552fec5d92, type: 3}
   playerArea: {fileID: 0}
   enemyArea: {fileID: 0}
   dropZoneP: {fileID: 0}
   dropZoneE: {fileID: 0}
+  playerHealthBar: {fileID: 0}
+  playerHealthText: {fileID: 0}
+  playerManaBar: {fileID: 0}
+  playerManaText: {fileID: 0}
+  enemyHealthBar: {fileID: 0}
+  enemyHealthText: {fileID: 0}
+  enemyManaBar: {fileID: 0}
+  enemyManaText: {fileID: 0}
   attackingCard: {fileID: 0}
+  endTurnBtn: {fileID: 0}

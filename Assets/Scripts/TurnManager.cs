@@ -59,8 +59,8 @@ public class TurnManager : NetworkBehaviour
                 clientID = clients[1].GetComponent<NetworkIdentity>();
         }
 
-        hostID.GetComponent<PlayerManager>().DrawCards(5);
-        clientID.GetComponent<PlayerManager>().DrawCards(5);
+        hostID.GetComponent<PlayerManager>().DrawCards(4);
+        clientID.GetComponent<PlayerManager>().DrawCards(4);
 
         startGameBtn.SetActive(false);
         if(!isServer) { clientID.GetComponent<PlayerManager>().TurnOffEndTurnBtn(); }
@@ -120,9 +120,9 @@ public class TurnManager : NetworkBehaviour
             {
                 hostID.GetComponent<PlayerManager>().DrawCards(1);
 
-                hostID.GetComponent<PlayerManager>().mana++;
-                if (hostID.GetComponent<PlayerManager>().mana > 10)
-                    hostID.GetComponent<PlayerManager>().mana = 10;
+                hostID.GetComponent<PlayerManager>().mana += 50;
+                if (hostID.GetComponent<PlayerManager>().mana > 200)
+                    hostID.GetComponent<PlayerManager>().mana = 200;
 
                 hostID.GetComponent<PlayerManager>().CmdUpdateManaBar();
 
@@ -141,9 +141,9 @@ public class TurnManager : NetworkBehaviour
             {
                 clientID.GetComponent<PlayerManager>().DrawCards(1);
 
-                clientID.GetComponent<PlayerManager>().mana++;
-                if (clientID.GetComponent<PlayerManager>().mana > 10)
-                    clientID.GetComponent<PlayerManager>().mana = 10;
+                clientID.GetComponent<PlayerManager>().mana += 50;
+                if (clientID.GetComponent<PlayerManager>().mana > 200)
+                    clientID.GetComponent<PlayerManager>().mana = 200;
 
                 clientID.GetComponent<PlayerManager>().CmdUpdateManaBar();
 

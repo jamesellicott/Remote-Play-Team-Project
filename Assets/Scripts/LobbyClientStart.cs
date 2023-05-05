@@ -17,6 +17,8 @@ public class LobbyClientStart : MonoBehaviour
     public TMP_InputField gameCodeInputField;
     public TextMeshProUGUI lobbyGameCodeTxt;
 
+    public Button startGameButton;
+
     private void OnEnable()
     {
         NetworkManagerLobby.OnClientConnected += HandleClientConnected;
@@ -45,6 +47,7 @@ public class LobbyClientStart : MonoBehaviour
     private void HandleClientConnected()
     {
         joinButton.interactable = true;
+        startGameButton.interactable = false;
 
         lobbyGameCodeTxt.text += gameCodeInputField.text;
 

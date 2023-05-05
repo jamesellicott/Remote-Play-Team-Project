@@ -89,7 +89,7 @@ public class Card : NetworkBehaviour
 
                 if (isOverDropZone && playerManager.mana >= manaRequirement)
                 {
-                    playerManager.mana -= manaRequirement;
+                    playerManager.CmdTakeMana(manaRequirement);
                     playerManager.CmdUpdateManaBar();
                     cardState = CardState.PLAYED;
                     transform.SetParent(dropZone.transform, false);
@@ -111,12 +111,10 @@ public class Card : NetworkBehaviour
 
         if(currColor == startingColor)
         {
-            gameObject.transform.Find("Stats").gameObject.SetActive(false);
             gameObject.GetComponent<Image>().color = backColor;
         }
         else
         {
-            gameObject.transform.Find("Stats").gameObject.SetActive(true);
             gameObject.GetComponent<Image>().color = startingColor;
         }
     }

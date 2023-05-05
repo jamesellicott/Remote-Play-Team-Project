@@ -9,15 +9,16 @@ using Mirror;
 public class PlayerManager : NetworkBehaviour
 {
     [Header("Player Details")]
-    public float maxHealth = 10;
-    public float maxMana = 10;
-    public float health = 10;
-    public float mana = 10;
+    public float maxHealth = 200;
+    public float maxMana = 200;
+    public float health = 200;
+    public float mana = 200;
 
     [Header("Cards")]
     public GameObject card1;
     public GameObject card2;
     public GameObject card3;
+    public GameObject card4;
 
     [Header("Zones")]
     public GameObject playerArea;
@@ -91,6 +92,7 @@ public class PlayerManager : NetworkBehaviour
         cards.Add(card1);
         cards.Add(card2);
         cards.Add(card3);
+        cards.Add(card4);
     }
 
     public void DrawCards(int ammount)
@@ -211,6 +213,17 @@ public class PlayerManager : NetworkBehaviour
         attackingCard = null;
     }
 
+    [Command]
+    public void CmdTakeMana(int manaToBeTaken)
+    {
+        RpcTakeMana(manaToBeTaken);
+    }
+
+    [ClientRpc]
+    private void RpcTakeMana(int manaToBeTaken)
+    {
+        mana -= manaToBeTaken;
+    }
 
     [Command]
     public void CmdUpdateManaBar()

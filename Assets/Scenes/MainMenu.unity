@@ -2645,12 +2645,12 @@ MonoBehaviour:
   - {fileID: 4174876979451496162, guid: 0885381931cef5448b7a9ba3596507bb, type: 3}
   - {fileID: 2105276099529238506, guid: 4e1aabffba41b4b42bee9ee0cd623eaf, type: 3}
   - {fileID: 5842851761866181287, guid: 61c2349c0017d6d47bcf492b64c86179, type: 3}
-  - {fileID: 7407447960567397625, guid: 9665c6ae8c726574fa1c8e8b28b1982d, type: 3}
   - {fileID: 8907673239355598112, guid: 84e8770aa23bdfb4fab52d17f610914f, type: 3}
   - {fileID: 1759139446235393598, guid: dcb38e6f3bb49b74eb15966cb86c6483, type: 3}
-  - {fileID: 2854853194797427702, guid: fa88efaa43a89074e8fc5f0cd13f17b4, type: 3}
-  - {fileID: 7940463757889110617, guid: 5deccc6e994727e499e8ea681d330ece, type: 3}
-  - {fileID: 3750144327661268606, guid: 159d790c58a494a44ba0dbb19b311e64, type: 3}
+  - {fileID: 954957494570410689, guid: 01859174e86c8604e8f59d67baa6e233, type: 3}
+  - {fileID: 6059784249165539077, guid: dc1648bbed994054088101cef5211605, type: 3}
+  - {fileID: 8817448664124922733, guid: 0343790e7f669bf418e6c67be482e730, type: 3}
+  - {fileID: 3441566149382237447, guid: 873742eef47f6e24aa5acc552fec5d92, type: 3}
   timeInterpolationGui: 0
   menuScene: Assets/Scenes/MainMenu.unity
   gameScene: Assets/Scenes/GameScene.unity
@@ -4329,6 +4329,7 @@ MonoBehaviour:
   joinButton: {fileID: 550736548}
   gameCodeInputField: {fileID: 1257133369}
   lobbyGameCodeTxt: {fileID: 40851465}
+  startGameButton: {fileID: 1575455542}
 --- !u!114 &1483102027
 MonoBehaviour:
   m_ObjectHideFlags: 0
